@@ -1,0 +1,939 @@
+body{
+    background: #9cefff68;
+    height: 200vh;
+}
+#chaticon{
+    width: 55px;
+} 
+/* .chatbot-toggler{
+    position: fixed;
+    right: 2vw;
+    bottom: 50px;
+    height: 50px;
+    width: 50px;
+    background: #7f6bff;
+    color: #fff;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+} */
+.Text_container{
+   
+    /* position: absolute;
+    padding-right: 20px; */
+    position: fixed;
+    right: 2vw;
+    bottom: 100px;
+    height: 150px;
+    width: 150px;
+    /* background: #7f6bff; */
+    color: #fff;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+}
+
+
+.bounce{
+    animation: bounce 1s infinite;
+
+}
+.bounce:hover{
+    cursor: pointer;
+}
+
+@keyframes bounce{
+    20%,50%,80%,to{ 
+        transform: translateY(0);
+    }
+    40%{
+        transform: translateY(-30px);
+    }
+    60%{
+        transform: translateY(-15px);
+    }
+    85%{
+        transform: translateY(-5px);
+    }
+   
+}
+
+
+
+.popup-container{
+    position: absolute;
+    
+    width: 100%;
+    height: 100%;
+    /* background-color: seagreen; */
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    opacity: 0;
+    pointer-events: none;
+}
+.popup-container.active{
+    opacity: 1;
+    transition: .4s ease;
+    pointer-events: auto;
+}
+.popup-container .popup-box{
+    width: 300px;
+    height: 30vh;
+    background: white;
+    /* width: 80vw; */
+    /* margin-bottom: 40px;
+    margin-right: 40px; */
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    padding: 30px;
+    background-color: #eaf1f2;
+    transform: scale(0);
+    position: fixed;
+    right: 2vw;
+    bottom: 100px;
+}
+
+.popup-container.active .popup-box{
+    transform: scale(1);
+    transition: .4s ease;
+    transition-delay: .25s;
+}
+
+.popup-box .header{
+    margin: 0px 10px;
+    display: flex;
+    justify-content: space-between;
+    
+}
+.popup-box .header .close-btn{
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #4753fb;
+
+}
+.popup-box .popupbody{
+    display: flex;
+    justify-content: flex-start;
+    
+}
+.popup-box .chatbot-btn{
+    display: flex;
+    justify-content: space-around;
+    
+}
+.popup-box .popupbody img{
+   width: 40px;
+    
+}
+.popup-box h1{
+    font-size: 25px;
+    color: #6e78ff;
+    line-height: 1;
+    /* border-bottom: 1px solid black; */
+
+}
+.popup-box p{
+ color: black;
+ margin: 12px 0 20px;
+}
+.popup-box .chat-btn,.voice-btn{
+    width: 40%;
+    height: 45px;
+    color: white;
+    background-color: #6e78ff;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    font-weight: 500;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+}
+.box img{
+    max-width: 100%;
+    max-height: 100%;
+}
+ .chatbot-toggler span{
+    position: absolute;
+}
+.show-chatbot .chatbot-toggler span:first-child,
+.chatbot-toggler span:last-child{
+    opacity: 0;
+}  
+
+.show-chatbot .chatbot-toggler span:last-child{
+    opacity: 1;
+}
+
+.chatbot{
+    position: fixed;
+    height: 45vh;
+    right: 2vw;
+    bottom: 80px;
+    width: 25rem;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 128px rgba(0,0,0,0.1);
+    transform: scale(0.5);
+    transform-origin: bottom right;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.1s ease;
+}
+
+.show-chatbot .chatbot{
+    transform: scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.chatbot header{
+    height: 48px;
+    background: #7f6bff;
+    padding: 10px 20px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    gap: 15rem;
+}
+.chatbot header button{
+    background: #7f6bff;
+    border: none;
+    outline: none;
+    color: white;
+}
+.chatbot header h2{
+    color: #fff;
+    font-size: 1.4 rem;
+}
+
+.chatbot header span{
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    height: 55px;
+    color: #fff;
+    cursor: pointer;
+    transform: translateX(-50%);
+    display: none;
+
+}
+.chatbot .chatbox{
+    height: 45%;
+    overflow-y: auto;
+    padding: 10px 25px 80px;
+}
+
+.chatbot .chat{
+    display: flex;
+}
+
+.chatbox .outgoing{
+    /* margin: 20px 0; */
+    justify-content: flex-end;
+}
+
+.chatbox .chat p{
+    color: #fff;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+    max-width: 75%;
+    border-radius: 10px 10px 0 10px;
+    background: #a16eff;
+    padding: 12px 16px;
+}
+
+.chatbox .chat p.error{
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.chatbox .incoming p{
+    color: #000;
+    border-radius: 0 10px 10px 10px;
+    background:#f2f2f2;
+}
+
+.hello{
+    padding: 10px 20px;
+        color: #000;
+        border-radius: 0 10px 10px 10px;
+        background:#f2f2f2;
+}
+
+.chatbot .chat-input{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    border-top: 1px solid black ;
+    display: flex;
+    /* gap: 5px; */
+    padding: 0px 20px;
+    background-color: white;
+    gap: 5rem;
+
+}
+
+.chatbot .chat-input textarea{
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    resize: none;
+    padding: 8px 16px 15px 0px;
+    height: 40px;
+    width: 75%;
+}
+
+.chat-input span{
+    height: 70px;
+    line-height: 60px;
+    width: 25%;
+    align-self: flex-end;
+    font-size: 1.35rem;
+    cursor: pointer;
+    background: #fff;
+    /* visibility: hidden; */
+}
+
+.chat-input textarea:valid ~ span{
+    visibility: visible;
+}
+
+
+
+
+/* -------------------------CSS FOR VOICECHAT--------------- */
+
+.container2{
+    position: fixed;
+    height: 45vh;
+    right: 2vw;
+    bottom: 80px;
+    width: 25rem;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 128px rgba(0,0,0,0.1);
+    transform: scale(0.5);
+    transform-origin: bottom right;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.1s ease;
+}
+
+.container2 {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateY(20px);
+}
+
+.container2.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+
+
+/* -----------------------CSS FOR VOICE CHAT------------------- */
+.wrapper{
+    padding: 0 2rem;
+    padding-top: 3rem;
+}
+
+button {
+    background-color: #9d9d9d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+button:hover {
+    background-color: #000000;
+}
+audio {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    position: relative;
+}
+
+.loader {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #000000;
+    -webkit-mask: radial-gradient(circle closest-side at 50% 40%, #0000 94%, #000);
+    mask: radial-gradient(circle closest-side at 50% 40%, #0000 94%, #000); /* Standard property */
+    transform-origin: 50% 40%;
+    animation: l25 1s infinite linear;
+}
+
+/* Keyframes for the l25 animation */
+@keyframes l25 {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+.loader::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+@keyframes l25 {
+    100% {transform: rotate(1turn)}
+}
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.image-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: url('abc.png') center center / cover no-repeat;
+    transform: translate(-50%, -88%);
+}
+
+#loaderText {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+#responseDisplay {
+    margin-top: 20px;
+    white-space: pre-wrap;
+}
+
+
+.refresh-btn {
+    /* position: absolute; */
+    top: 3rem;
+    right: 4rem;
+    cursor: pointer;
+}
+
+.info-btn {
+    /* position: relative; */
+    top: 3rem;
+    left: 2rem;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+}
+
+.info-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    background-color: #333;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.info-btn:hover .tooltip {
+    display: block;
+}
+
+.loader-container .image-circle img{
+    height: 40px;
+    width: 40px;
+    align-items: center;
+}
+.header2{
+    background: #7f6bff;
+    text-align: center;
+    position: relative;
+    display: flex;
+    gap: 15rem;
+    height: 2rem;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+}
+
+@media(max-width: 490px)
+{
+    .chatbot{
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0px;
+    }
+    .chatbot .chatbox{
+        height: 70%;
+
+    }
+    .chatbot header span
+    {
+        display: block;
+    }
+    .chatbot .chat-input textarea
+    {
+        width: 55%;
+    }
+    #chaticon{
+        width: 55px;
+    } 
+
+    .popup-box
+    {
+        position: fixed;
+        height: auto;
+        width: auto;
+        right: 2vw;
+        bottom: 100px;
+    }
+    .popup-container .popup-box{
+        width: 70%;
+        height: 30vh;
+        background: white;
+        /* width: 80vw; */
+        /* margin-bottom: 40px;
+        margin-right: 40px; */
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(0,0,0,.1);
+        padding: 30px;
+        background-color: #eaf1f2;
+        transform: scale(0);
+        position: fixed;
+        right: 2vw;
+        bottom: 100px;
+    }
+    .chatbot header button{
+        display: none;
+        background: #7f6bff;
+        border: none;
+        outline: none;
+
+    }
+    .container2 {
+        width: 50%; /* Adjust width as needed */
+        height: 40vh; /* Adjust height as needed */
+        top: 25%;
+        left: 25%;
+        transform: translate(-50%, -50%);
+    }
+
+    .chatbot .chat-input{
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        border-top: 1px solid black ;
+        display: flex;
+        /* gap: 5px; */
+        padding: 0px 20px;
+        background-color: white;
+        gap: 10rem;
+    
+    }
+}
+
+
+/*^ ================================Voice Chat ================= */
+
+.voicecontainer{
+    width: 100%;
+    height: 100vh;
+    /* background-color: #6e78ff; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 2px solid red; */
+}
+/* .voice-popup{
+    width:400px ;
+    height: 400px;
+    background-color: white;
+    border-radius: 6px;
+    position: fixed;
+    text-align: center; */
+    /* right: 3vw;
+    bottom: 100px; */
+    /* transform: translate(-50%,20%) scale(0);
+    visibility: hidden;
+    transition: transform 0.4s,0.4s;
+    
+} */
+.voice-popup {
+    width: 400px;
+    height: 450px;
+    background-color: white;
+    border-radius: 6px;
+    position: fixed;
+    right: 2vw; /* Final position 3vw from the right */
+    bottom: 100px; /* Final position 100px from the bottom */
+    transform: translate(50%, 50%) scale(0); /* Start off-screen and scaled down */
+    visibility: hidden; /* Initially hidden */
+    transition: transform 0.4s ease-out, visibility 0s 0.4s; /* Transition for transform and visibility */
+}
+
+.voice-popup.open-voice {
+    transform: translate(0, 0) scale(1); /* Move to the final position and scale up */
+    visibility: visible; /* Make it visible */
+    transition: transform 0.4s ease-out; /* Transition for transform only */
+}
+
+.open-voice{
+        right: 3vw; /* Final position 3vw from the right */
+        bottom: 100px; /* Final position 100px from the bottom */
+        visibility: visible; /* Make it visible */
+        opacity: 1; /* Fully opaque */
+        transform: translate(0, 0) scale(1); /* Move to the final position and scale up */
+
+}
+
+.speak_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.speak_btn button {
+    display: inline-block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #8E2DE2, #4A00E0);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.speak_btn button:hover {
+    background: linear-gradient(135deg, #6A11CB, #2575FC);
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.speak_btn button:active {
+    background: linear-gradient(135deg, #4A00E0, #8E2DE2);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+}
+
+
+
+
+.voice-popup img{
+    width: 100px;
+}
+.voice-popup header{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #6e78ff;
+    /* background-color: #000; */
+    color: white;
+    border-radius: 4px;
+    height: 48px;
+}
+.voice-popup header img{
+    width: 50px;
+}
+.voice-popup .logo {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    gap: 20px;
+    padding: 10px;
+}
+
+.voice-popup header .logo h2{
+    font-size: 20px;
+}
+
+
+.voice-popup .closevoice-btn {
+    background: none;
+    font-size: 25px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    padding-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.loadingitem{
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: space-between;
+    padding-left: 30px;
+    padding-right: 29px;
+    padding-top: 10px;
+}
+.info{
+    /* position: absolute; */
+    /* top: 10px;
+    left: 10px; */
+    background-color: transparent;
+    fill: currentColor;
+    cursor: pointer
+    
+    
+
+}
+#startButton{
+    margin: 10px 0;
+}
+
+.tooltip{
+    display: none;
+    position: absolute;
+    top: 75px;
+    left: 10px;
+    background-color: white;
+    color: rgb(206, 42, 42);
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 400;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.info:hover .tooltip{
+    display: block;
+    
+}
+
+.audio-container {
+    margin-top: 20px; /* Adjust as needed */
+    text-align: center;
+  }
+  
+#loaderText{
+    margin-top: 10px;
+    font-size: 14px;
+    color: black;
+}
+#responseDisplay{
+    margin-top: 20px;
+
+}
+.micbg{
+    /* border: 2px solid blue; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 400px;
+    height:130px;
+    border-radius: 5px;
+    margin: 2rem 0;
+    
+    
+
+}
+
+.micbg .hero{
+    /* border: 2px solid red; */
+    border-radius: 50%;
+    width: 200px;
+    height: 100px;
+    background: url('./7ZU8-unscreen.gif');
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.micbg .hero .talk{
+    border: none;
+    background: url('./7ZU8-unscreen.gif');
+    background-position: center;
+    background: none;
+}
+
+.container{
+width: 100%;
+}
+
+#audioPlayer {
+    width: 80%;
+    margin: 12px auto; /* Top margin and auto for left and right margins to center */
+    display: block; /* Ensure it behaves as a block element */
+}
+
+.innerfooter{
+    /* border: 2px solid red; */
+    height: 110px;
+    border-radius: 10px;
+    margin-top: 12px;
+}
+
+.innerfooter .responseDisplay p{
+    margin-bottom: 0px;
+}
+
+.innerfooter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .innerfooter .container {
+    text-align: center;
+  }
+  
+
+
+/*^ ================================Voice Chat ================= */
+
+/* -------------------MEDIA QUERIES FOR VOICE CHAT BOT---------------------- */
+
+
+@media(max-width: 490px)
+{
+    .voice-popup {
+        width: 100%;
+        height: auto;
+        bottom: 0;
+        right: 0;
+        border-radius: 6px 6px 0 0;
+        transform: translate(0, 100%) scale(0); /* Start off-screen at the bottom */
+        transition: transform 0.4s ease-out, visibility 0s 0.4s; /* Transition for transform and visibility */
+    }
+
+    .voice-popup.open-voice {
+        transform: translate(0, 0) scale(1); /* Move to the final position and scale up */
+    }
+
+    #voice-popup{
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 60vh;
+        border-radius: 0px;
+    }
+
+    
+    .micbg {
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center children horizontally */
+        justify-content: center; /* Center children vertically */
+        gap: 15px;
+        width: 100%; /* Ensure it takes full width of the parent */
+        max-width: 400px; /* Set a maximum width for responsiveness */
+        margin: auto; /* Center the container itself if needed */
+        height: auto; /* Adjust height automatically */
+        border-radius: 5px;
+        margin-top: 4rem;
+    }
+    
+    .micbg .hero {
+        border-radius: 50%;
+        width: 200px;
+        height: 100px;
+        background: url('./7ZU8-unscreen.gif');
+        background-position: center;
+        background-size: cover;
+        display: flex;
+        align-items: center; /* Center content vertically */
+        justify-content: center; /* Center content horizontally */
+    }
+    
+    #audioPlayer {
+        width: 80%;
+        margin: 12px auto; /* Center horizontally and add top margin */
+        display: block; /* Ensure it behaves as a block element */
+    }
+    
+    .innerfooter{
+        /* border: 2px solid red; */
+        height: 110px;
+        border-radius: 10px;
+        margin-top: 3rem;
+    }
+
+}
+
+
+/* ------------------------------------css for loader----------------------------------- */
+
+#control {
+  top: 90%;
+  left: 50%;
+  padding: 2rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+#control:hover { color: #fa2; }
+
+@media only screen and (max-width: 32rem){
+  h1 { font-size: 6vw; }
+  h2 { font-size: 6vw; }
+  span { font-size: 5vw; }
+}

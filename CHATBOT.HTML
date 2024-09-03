@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PropTech Chatbot</title>
+    <link rel="stylesheet" href="chat.css" />
+    
+    
+    <!-- google font link for icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />   -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+  </head>
+  <body>
+    <div class="Text_container">
+      <div class="box bounce" id="icon-btn">
+        <img src="./robot.svg" alt="Robot" />
+      </div>
+    </div>
+    <div class="popup-container">
+      <div class="popup-box">
+        <!-- header  -->
+        <div class="header">
+          <h1>Chatbot</h1>
+          <button class="close-btn">&times;</button>
+        </div>
+
+        <!-- popupbody  -->
+
+        <div class="popupbody">
+          <img src="./robot.svg" alt="" />
+          <p>
+            Hey👋<br />
+            How Can I help You!
+          </p>
+        </div>
+
+        <!-- chat-btn  -->
+        <div class="chatbot-btn">
+          <button class="chat-btn">Chat</button>
+          <button class="voice-btn">Voice</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chatbot">
+      <header>
+        <h2>Chatbot</h2>
+        <button class="material-icons" id="removechat">close</button>
+        <span id="close-btn2" class="close-btn material-icons">close</span>
+      </header>
+      <ul class="chatbox">
+        <li class="chat incoming">
+          <span
+            ><img
+              src="https://d3rsl9g9lql4s2.cloudfront.net/proptechlogo.png"
+              alt="oops.."
+              id="chaticon"
+          />
+        </span>
+        
+        <div class="hello">Hi there!!</div>
+
+        </li>
+      </ul>
+      <div class="chat-input">
+        <textarea placeholder="Enter a message..."></textarea>
+        <span id="send-btn1" class="material-icons">send</span>
+        <!-- <span id="send-btn2" class="material-icons">mic</span> -->
+      </div>
+    </div>
+
+    <!-- CODE FOR AUDIO CHATBOX------------------- -->
+
+    <div class="voicecontainer">
+      <div class="voice-popup" id="voice-popup">
+        <header>
+          <div class="logo">
+
+            <h2>Let's Talk👋</h2>
+          </div>
+
+          <button class="closevoice-btn">&times;</button>
+        </header>
+        
+        <div class="speak_btn">
+          <button id="startButton">Start Speaking</button>
+        </div>
+
+        <div class="micbg">
+          <div class="hero">
+            <div class="loader-container">
+              <div class="loader" id="loader"></div>
+              <div class="image-circle"></div>
+              <div id="loaderText"></div>
+            </div>
+
+          </div>
+          <div id="loaderText"></div>
+        </div>
+        <div class="innerfooter">
+            <div class="container">
+            
+    
+                <p id="status">Click the button and start speaking...</p>
+                <audio id="audioPlayer" controls></audio>
+            </div>
+     
+        </div>
+
+      </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@azure/cognitiveservices-speech-sdk@latest/dist/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+    <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+    <script src="chat.js"></script>
+  </body>
+</html>
