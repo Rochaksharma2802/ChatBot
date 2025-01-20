@@ -1,44 +1,21 @@
-const showPopup = document.querySelector('#icon-btn');
-    const popupContainer = document.querySelector('.popup-container');
-    const chatOption = document.querySelector('.chat-btn');
-    const closeBtn = document.querySelector('.close-btn');
-    const chatbotClose = document.querySelector('#close-btn2');
-    const removechat = document.querySelector('#removechat');
-    const voiceChat = document.querySelector('.voice-btn');
 
-    // voiceChat.onclick = ()=>{
-    //     popupContainer.classList.remove('active');
-    //     popupContainer.classList.add('conatiner2');
-    // }
-
-    document.addEventListener('DOMContentLoaded', () => {
+        // JavaScript functionality
+        const showPopup = document.querySelector('#icon-btn');
         const popupContainer = document.querySelector('.popup-container');
-        const voiceBtn = document.querySelector('.voice-btn');
-        const container2 = document.querySelector('.container2');
-    
-        voiceBtn.addEventListener('click', () => {
-            popupContainer.classList.remove('active');
-            // container2.classList.add('active');
-        });});
+        const chatOption = document.querySelector('.chat-btn');
+        const closeBtn = document.querySelector('.close-btn');
+        const chatbotClose = document.querySelector('#close-btn2');
+        const removechat = document.querySelector('#removechat');
+        const voiceChat = document.querySelector('.voice-btn');
+        const popupBox = document.querySelector('.popup-box');
+        const voicePopup = document.querySelector('.voice-popup');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const statusText = document.getElementById('status');
+        const loader = document.getElementById('loader');
+        const stopAudioBtn = document.getElementById('stopAudioBtn');
+        const pauseAudioBtn = document.getElementById('pauseAudioBtn');
 
-    chatbotClose.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
-    chatOption.addEventListener("click", () => document.body.classList.add("show-chatbot"));
-    removechat.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
-    
-    chatOption.onclick = () => {
-        popupContainer.classList.remove('active');
-    }
-    
-    showPopup.onclick = () => {
-        popupContainer.classList.add('active');
-    }
-    
-    closeBtn.onclick = () => {
-        popupContainer.classList.remove('active');
-    }
-    
-    // MY CODE
-    const chatInput = document.querySelector(".chat-input textarea");
+        const chatInput = document.querySelector(".chat-input textarea");
     const sendChatBtn = document.querySelector(".chat-input span");
     const chatbox = document.querySelector(".chatbox");
     
@@ -49,7 +26,7 @@ const showPopup = document.querySelector('#icon-btn');
         chatLi.classList.add("chat", className);
         let chatContent = className === "outgoing"
             ? `<p></p>`
-            : `<span><img src="https://d3rsl9g9lql4s2.cloudfront.net/proptechlogo.png" alt="oops.." id="chaticon"></span><p></p>`;
+            : `<span><img src="robot.svg" alt="oops.." id="chaticon"></span><p></p>`;
         chatLi.innerHTML = chatContent;
         chatLi.querySelector("p").textContent = message;
         return chatLi;
@@ -100,141 +77,267 @@ const showPopup = document.querySelector('#icon-btn');
         }
     });
 
+        const speechConfig = {
+            subscriptionKey: '0643e6b741d24a9597e6fee4c45ff46c',
+            region: 'eastus',
+            openAiEndpoint: 'https://az-cloudful-openai.openai.azure.com/',
+            openAiApiKey: 'f76ef8aa6f3e4201965df9f1b3c3badd',
+            openAiApiVersion: '2024-04-01-preview',
+            openAiDeployment: 'az-openai-test-deployment'
+        };
+
+        // Function to show loader animation
+        const startLoader = () => {
+            loader.classList.remove('stopped'); // Start animation
+        };
+
+        // Function to stop loader animation
+        const stopLoader = () => {
+            loader.classList.add('stopped'); // Stop animation but keep loader visible
+        };
+
+        // Show and hide popups
+        chatOption.onclick = () => popupContainer.classList.remove('active');
+        showPopup.onclick = () => popupContainer.classList.add('active');
+        closeBtn.onclick = () => popupContainer.classList.remove('active');
+        chatOption.addEventListener("click", () => document.body.classList.add("show-chatbot"));
+        removechat.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
+
+        // Show voice popup and start recording
+        const showVoicePopup = () => {
+            popupContainer.classList.add('active');
+            popupBox.style.display = 'none';
+            voicePopup.classList.add('open-voice');
+            startRecognition();
+        };
+
+        // Hide voice popup and stop audio playback
+        const hideVoicePopup = () => {
+            if (!audioPlayer.paused) {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+            }
+            popupBox.style.display = 'block';
+            voicePopup.classList.remove('open-voice');
+        };
+
+        // Add event listener to voice button
+        voiceChat.addEventListener('click', showVoicePopup);
+
+        // Add event listener to close the voice popup
+        document.querySelector('.closevoice-btn').addEventListener('click', hideVoicePopup);
+
+        // Add event listeners for stop and pause buttons
+        // Add event listener for stopAudioBtn to have the same functionality as closevoice-btn
+        stopAudioBtn.addEventListener('click', hideVoicePopup);
 
 
+        pauseAudioBtn.addEventListener('click', () => {
+            if (!audioPlayer.paused) {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                pauseAudioBtn.querySelector('img').src = 'a.svg'; // Change to pause icon
+            }else {
+                audioPlayer.pause();
+                pauseAudioBtn.querySelector('img').src = 'c.svg'; // Change to play icon
+            }
+            
+            startRecognition(); // Start recording again
+        });
 
+        // Start speech recognition and handle recording
+        function startRecognition() {
+            if (typeof window.SpeechSDK === 'undefined') {
+                console.error('SpeechSDK is not loaded');
+                return;
+            }
 
+            const SpeechSDK = window.SpeechSDK;
+            const speechConfigInstance = SpeechSDK.SpeechConfig.fromSubscription(speechConfig.subscriptionKey, speechConfig.region);
+            const audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
 
+            const recognizer = new SpeechSDK.SpeechRecognizer(speechConfigInstance, audioConfig);
+            statusText.textContent = 'Listening...';
 
-// -------------------------------JS FOR VOICE--------------------------------
+            // Show loader while recording
+            startLoader();
 
+            // Set a timer to stop recognition after 5 seconds
+            const stopRecognitionTimeout = setTimeout(() => {
+                recognizer.stopContinuousRecognitionAsync(() => {
+                    statusText.textContent = 'Analyzing...';
+                    startLoader(); // Show loader during analyzing
+                    stopLoader(); // Hide loader after analyzing
+                }, (err) => {
+                    console.error('Error stopping recognition:', err);
+                    statusText.textContent = 'Error.';
+                    stopLoader();
+                });
+            }, 5000); // 5000 milliseconds = 5 seconds
 
-const popupBox = document.querySelector('.popup-box');
-const voicePopup = document.querySelector('.voice-popup');
-const audioPlayer = document.getElementById('audioPlayer'); // Access the audio player
+            recognizer.recognized = (s, e) => {
+                if (e.result.reason === SpeechSDK.ResultReason.RecognizedSpeech) {
+                    const recognizedText = e.result.text;
+                    statusText.textContent = `Recognized: ${recognizedText}`;
+                    generateTextAndSpeak(recognizedText);
+                    clearTimeout(stopRecognitionTimeout); // Clear the timer if speech is recognized before 5 seconds
+                    recognizer.stopContinuousRecognitionAsync(() => {
+                        statusText.textContent = 'Analyzing...';
+                        startLoader(); // Show loader during analyzing
+                        stopLoader(); // Hide loader after analyzing
+                    });
+                }
+            };
 
-// Function to show voice popup and hide popup box
-const showVoicePopup = () => {
-    popupContainer.classList.add('active'); // Optionally add an 'active' class to the container if needed
-    popupBox.style.display = 'none'; // Hide the popup box
-    voicePopup.classList.add('open-voice'); // Show the voice popup
-}
+            recognizer.startContinuousRecognitionAsync();
+        }
 
-// Function to hide voice popup and show popup box
-const hideVoicePopup = () => {
-    // Stop the audio playback if it's playing
-    if (!audioPlayer.paused) {
-        audioPlayer.pause(); // Pause the audio
-        audioPlayer.currentTime = 0; // Reset audio to the beginning
+        // Generate response and play it as audio
+        async function generateTextAndSpeak(text) {
+            try {
+                const response = await fetch(`${speechConfig.openAiEndpoint}/openai/deployments/${speechConfig.openAiDeployment}/completions?api-version=${speechConfig.openAiApiVersion}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'api-key': speechConfig.openAiApiKey
+                    },
+                    body: JSON.stringify({
+                        prompt: text,
+                        max_tokens: 128,
+                        model: speechConfig.openAiDeployment
+                    })
+                });
+
+                if (!response.ok) throw new Error('Network response was not ok');
+
+                const result = await response.json();
+                const responseText = result.choices[0].text.trim();
+
+                const ttsResponse = await fetch(`https://${speechConfig.region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/ssml+xml',
+                        'X-Microsoft-OutputFormat': 'riff-24khz-16bit-mono-pcm',
+                        'Ocp-Apim-Subscription-Key': speechConfig.subscriptionKey
+                    },
+                    body: `
+                    <speak version="1.0" xml:lang="en-US">
+                        <voice xml:lang="en-US" xml:gender="Female" name="en-US-AvaMultilingualNeural">
+                            ${responseText}
+                        </voice>
+                    </speak>`
+                });
+
+                if (ttsResponse.ok) {
+                    const audioData = await ttsResponse.arrayBuffer();
+                    const blob = new Blob([audioData], { type: 'audio/wav' });
+                    const url = URL.createObjectURL(blob);
+                    audioPlayer.src = url;
+                    audioPlayer.play();
+
+                    // Update status and show loader while audio is playing
+                    statusText.textContent = 'Done';
+                    startLoader(); // Show loader
+
+                    // Resume loader animation if the audio is played or paused
+                    audioPlayer.onplay = () => {
+                        loader.classList.remove('stopped'); // Resume animation
+                    };
+
+                    // Start recording again after the audio finishes playing
+                    audioPlayer.onended = () => {
+                        stopLoader(); // Hide loader
+                        startRecognition();
+                    };
+
+                    // Stop the loader animation if the audio is paused
+                    audioPlayer.onpause = stopLoader;
+                } else {
+                    console.error("Error in TTS response:", ttsResponse.statusText);
+                    statusText.textContent = "Error generating speech.";
+                    stopLoader();
+                }
+            } catch (error) {
+                console.error('Error in generateTextAndSpeak:', error);
+                statusText.textContent = "Error generating speech.";
+                stopLoader();
+            }
+        }
+
+        
+const micText = document.getElementById('micText');
+
+// Update micText when starting and stopping recognition
+function startRecognition() {
+    if (typeof window.SpeechSDK === 'undefined') {
+        console.error('SpeechSDK is not loaded');
+        return;
     }
 
-    popupBox.style.display = 'block'; // Show the popup box
-    voicePopup.classList.remove('open-voice'); // Hide the voice popup
+    const SpeechSDK = window.SpeechSDK;
+    const speechConfigInstance = SpeechSDK.SpeechConfig.fromSubscription(speechConfig.subscriptionKey, speechConfig.region);
+    const audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
+
+    const recognizer = new SpeechSDK.SpeechRecognizer(speechConfigInstance, audioConfig);
+    statusText.textContent = 'Listening...';
+
+    // Show loader and update micText while recording
+    startLoader();
+    micText.textContent = '⚫⚫⚫';
+
+    // Set a timer to stop recognition after 5 seconds
+    const stopRecognitionTimeout = setTimeout(() => {
+        recognizer.stopContinuousRecognitionAsync(() => {
+            statusText.textContent = 'Analyzing...';
+            startLoader(); // Show loader during analyzing
+            stopLoader(); // Hide loader after analyzing
+            micText.textContent = 'Tap to interrupt';
+        }, (err) => {
+            console.error('Error stopping recognition:', err);
+            statusText.textContent = 'Error.';
+            stopLoader();
+        });
+    }, 5000); // 5000 milliseconds = 5 seconds
+
+    recognizer.recognized = (s, e) => {
+        if (e.result.reason === SpeechSDK.ResultReason.RecognizedSpeech) {
+            const recognizedText = e.result.text;
+            statusText.textContent = `Recognized: ${recognizedText}`;
+            generateTextAndSpeak(recognizedText);
+            clearTimeout(stopRecognitionTimeout); // Clear the timer if speech is recognized before 5 seconds
+            recognizer.stopContinuousRecognitionAsync(() => {
+                statusText.textContent = 'Analyzing...';
+                startLoader(); // Show loader during analyzing
+                stopLoader(); // Hide loader after analyzing
+                micText.textContent = 'Tap to interrupt';
+            });
+        }
+    };
+
+    recognizer.startContinuousRecognitionAsync();
 }
 
-// Add event listener to voice button
-voiceChat.addEventListener('click', showVoicePopup);
+// Also update micText when audio is paused or played
+audioPlayer.onplay = () => {
+    loader.classList.remove('stopped'); // Resume animation
+    micText.textContent = 'Tap to interrupt';
+};
 
-// Optional: Add event listener to close the voice popup and show popup box
-document.querySelector('.closevoice-btn').addEventListener('click', hideVoicePopup);
+audioPlayer.onended = () => {
+    stopLoader(); // Hide loader
+    micText.textContent = 'Tap to interrupt';
+    startRecognition();
+};
 
-// ----------------------JS FOR VOICE INPUT/OUTPUT----------------------
+audioPlayer.onpause = stopLoader;
 
-const startButton = document.getElementById('startButton');
-const statusText = document.getElementById('status');
-     
-// const speechConfig = {
-//     subscriptionKey: '0643e6b741d24a9597e6fee4c45ff46c',
-//     region: 'eastus',
-//     openAiEndpoint: 'https://az-cloudful-openai.openai.azure.com/',
-//     openAiApiKey: 'f76ef8aa6f3e4201965df9f1b3c3badd',
-//     openAiApiVersion: '2024-04-01-preview',
-//     openAiDeployment: 'az-openai-test-deployment'
-// };
-     
-// startButton.addEventListener('click', () => {
-//     startRecognition();
-// });
-     
-// function startRecognition() {
-//     // Ensure the Speech SDK is loaded
-//     if (typeof window.SpeechSDK === 'undefined') {
-//         console.error('SpeechSDK is not loaded');
-//         return;
-//     }
-    
-//     const SpeechSDK = window.SpeechSDK;
-//     const speechConfigInstance = SpeechSDK.SpeechConfig.fromSubscription(speechConfig.subscriptionKey, speechConfig.region);
-//     const audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
-    
-//     const recognizer = new SpeechSDK.SpeechRecognizer(speechConfigInstance, audioConfig);
-    
-//     recognizer.recognizeOnceAsync(result => {
-//         if (result.reason === SpeechSDK.ResultReason.RecognizedSpeech) {
-//             statusText.textContent = `Recognized: ${result.text}`;
-//             generateTextAndSpeak(result.text);
-//         } else {
-//             statusText.textContent = "Speech not recognized.";
-//             console.error('Speech recognition error:', result.errorDetails);
-//         }
-//         recognizer.close();
-//     }, error => {
-//         console.error('Recognition error:', error);
-//         statusText.textContent = "Error during recognition.";
-//         recognizer.close();
-//     });
-// }
-     
-// async function generateTextAndSpeak(text) {
-//     try {
-//         const response = await fetch(`${speechConfig.openAiEndpoint}/openai/deployments/${speechConfig.openAiDeployment}/completions?api-version=${speechConfig.openAiApiVersion}`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'api-key': speechConfig.openAiApiKey
-//             },
-//             body: JSON.stringify({
-//                 prompt: text,
-//                 max_tokens: 128,
-//                 model: speechConfig.openAiDeployment
-//             })
-//         });
+const micBtn = document.getElementById('micBtn');
+micBtn.addEventListener('click', () => {
+    if (!audioPlayer.paused) {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+    }
 
-//         if (!response.ok) throw new Error('Network response was not ok');
+    startRecognition(); // Start recording again
+});
 
-//         const result = await response.json();
-//         const responseText = result.choices[0].text.trim();
-
-//         const ttsResponse = await fetch(`https://${speechConfig.region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/ssml+xml',
-//                 'X-Microsoft-OutputFormat': 'riff-24khz-16bit-mono-pcm',
-//                 'Ocp-Apim-Subscription-Key': speechConfig.subscriptionKey
-//             },
-//             body: `
-//             <speak version="1.0" xml:lang="en-US">
-//                 <voice xml:lang="en-US" xml:gender="Female" name="en-US-JessaNeural">
-//                     ${responseText}
-//                 </voice>
-//             </speak>`
-//         });
-
-//         if (ttsResponse.ok) {
-//             const audioData = await ttsResponse.arrayBuffer();
-//             const blob = new Blob([audioData], { type: 'audio/wav' });
-//             const url = URL.createObjectURL(blob);
-//             audioPlayer.src = url;
-//             audioPlayer.play();
-//         } else {
-//             console.error("Error in TTS response:", ttsResponse.statusText);
-//             statusText.textContent = "Error generating speech.";
-//         }
-//     } catch (error) {
-//         console.error('Error in generateTextAndSpeak:', error);
-//         statusText.textContent = "Error generating speech.";
-//     }
-// }
-
-    
-     
