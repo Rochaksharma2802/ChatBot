@@ -5,23 +5,7 @@ body{
 #chaticon{
     width: 55px;
 } 
-/* .chatbot-toggler{
-    position: fixed;
-    right: 2vw;
-    bottom: 50px;
-    height: 50px;
-    width: 50px;
-    background: #7f6bff;
-    color: #fff;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    outline: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-} */
+
 .Text_container{
    
     /* position: absolute;
@@ -321,6 +305,15 @@ body{
 
 /* -------------------------CSS FOR VOICECHAT--------------- */
 
+#status {
+    font-size: 1.5em; /* Adjust this value as needed */
+    font-weight: bold;
+    color: #333; /* Change the color if needed */
+    text-align: center;
+    margin: 10px 0; /* Add some margin if needed */
+}
+
+
 .container2{
     position: fixed;
     height: 45vh;
@@ -350,6 +343,84 @@ body{
     opacity: 1;
     transform: translateY(0);
 }
+.voice-controls {
+    display: flex;
+    justify-content: center;
+    gap: 60px; /* Adjust space between buttons */
+    margin-top: 10px; /* Adjust space above the button group */
+}
+
+.voice-controls {
+    display: flex;
+    justify-content: space-between; /* Space buttons evenly */
+    align-items: center;
+    padding: 10px; /* Adjust padding as needed */
+    background-color: #f5f5f5; /* Optional: background for controls area */
+}
+
+.voice-controls {
+    display: flex;
+    justify-content: center; /* Center the buttons within the container */
+    align-items: center;
+    padding: 10px; /* Adjust padding as needed */
+    background-color: #f5f5f5; /* Optional: background for controls area */
+    gap: 5px; /* Space between the buttons (reduce as needed) */
+}
+
+.control-btn {
+    background-color: transparent; /* Ensure background is transparent to see SVGs */
+    border: none;
+    padding: 0px; /* Remove padding */
+    cursor: pointer;
+    display: flex;
+    align-items: center; /* Align mic icon and text vertically */
+    margin: 0; /* Remove default margins */
+}
+
+.control-btn img {
+    width: 44px; /* Adjust size of SVG icons */
+    height: 44px;
+    display: block;
+}
+
+#micBtn {
+    flex: 2; /* Adjust the flex value to control how much space it takes */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px; /* Adjust padding to control the overall button size */
+    background-color: transparent; /* Ensure background is transparent */
+    border: none;
+    cursor: pointer;
+}
+
+#micBtn img {
+    width: 28px; /* Adjust the width of the mic icon */
+    height: 28px; /* Adjust the height of the mic icon */
+}
+
+#micText {
+    font-size: 14px; /* Adjust the text size */
+    color: #333;
+    margin-left: 8px; /* Space between icon and text */
+}
+
+#pauseAudioBtn, #stopAudioBtn {
+    display: flex;
+    justify-content: center; /* Center the icons inside the buttons */
+}
+
+#micBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the mic button and text */
+    margin-left: -5px; /* Adjust the spacing to bring buttons closer */
+}
+
+
+
+
+
 
 
 
@@ -386,70 +457,55 @@ audio {
     position: relative;
 }
 
-.loader {
+/* chat.css */
+.loader-container {
     position: relative;
     width: 90px;
     height: 90px;
-    border-radius: 50%;
-    background: #000000;
-    -webkit-mask: radial-gradient(circle closest-side at 50% 40%, #0000 94%, #000);
-    mask: radial-gradient(circle closest-side at 50% 40%, #0000 94%, #000); /* Standard property */
-    transform-origin: 50% 40%;
-    animation: l25 1s infinite linear;
-}
-
-/* Keyframes for the l25 animation */
-@keyframes l25 {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-
-.loader::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-}
-
-@keyframes l25 {
-    100% {transform: rotate(1turn)}
-}
-
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.image-circle {
+  }
+  
+  .loader-overlay {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: url('abc.png') center center / cover no-repeat;
-    transform: translate(-50%, -88%);
-}
+    width: 80px; /* Adjust size as needed */
+    height: 60px; /* Adjust size as needed */
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Ensures the overlay doesn't interfere with interactions */
+  }
+  
 
-#loaderText {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555;
-}
-#responseDisplay {
-    margin-top: 20px;
-    white-space: pre-wrap;
-}
-
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 40px;
+    aspect-ratio: 1;
+    --c: linear-gradient(#000 0 0);
+    --r1: radial-gradient(farthest-side at bottom,#000 93%,#0000);
+    --r2: radial-gradient(farthest-side at top   ,#000 93%,#0000);
+    background: 
+      var(--c) ,var(--r1),var(--r2),
+      var(--c) ,var(--r1),var(--r2),
+      var(--c) ,var(--r1),var(--r2);
+    background-repeat: no-repeat;
+    animation: l1 1s infinite alternate;
+  }
+  
+  @keyframes l1 {
+    0%,10% {
+      background-size: 8px 0,8px 4px,8px 4px;
+      background-position: 0 50%,0 calc(50% - 2px),0 calc(50% + 2px),50% 50%,50% calc(50% - 2px),50% calc(50% + 2px),100% 50%,100% calc(50% - 2px),100% calc(50% + 2px);
+    }
+    90%,100% {
+      background-size: 8px 100%,8px 4px, 8px 4px;
+      background-position: 0 50%,0 -2px,0 calc(100% + 2px),50% 50%,50% -2px,50% calc(100% + 2px),100% 50%,100% -2px,100% calc(100% + 2px);
+    }
+  }
+  
+  /* Class to stop the animation but keep the loader visible */
+  .loader.stopped {
+    animation: none; /* Stops animation */
+  }
+  
 
 .refresh-btn {
     /* position: absolute; */
